@@ -18,6 +18,12 @@ categoriesRouter.post("/", (req, res) => {
   try {
     const { name, description } = req.body;
 
+    const alreadyExists = categoriesRepository.findByName(name);
+
+    if (alreadyExists) {
+      return res.status(400).json({ Error: "Category name already being used."});
+    }
+
     categoriesRepository.createCategory({ name, description });
 
     return res.status(201).send();
